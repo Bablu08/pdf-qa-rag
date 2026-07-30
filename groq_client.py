@@ -24,7 +24,7 @@ def ask_llm(prompt):
     )
 
     for chunk in stream:
-        content = chunk.choices[0].delta
+        content = chunk.choices[0].delta.content
 
         if content:
             yield content
