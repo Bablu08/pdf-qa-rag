@@ -24,3 +24,16 @@ def add_to_knowledge_base(chunks):
         documents=chunks,
         embeddings=embeddings
     )
+
+def search_knowledge_base(query):
+
+    model = load_model()
+
+    query_embedding = model.encode(query).tolist()
+
+    search_results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=3
+    )
+    
+    return search_results["documents"][0]
