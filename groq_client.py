@@ -22,3 +22,9 @@ def ask_llm(prompt):
         top_p=1,
         stream=True
     )
+
+    for chunk in stream:
+        content = chunk.choices[0].delta
+
+        if content:
+            yield content
