@@ -7,7 +7,12 @@ def ask_llm(prompt):
     global client
 
     if client is None:
-        client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+        api_key=os.environ.get("GROQ_API_KEY")
+
+        if not api_key:
+            raise ValueError("GROQ_API_KEY is not set. Add it to your environment or .env file.")
+        
+        client = Groq(api_key=api_key)
 
     stream = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
