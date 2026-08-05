@@ -1,8 +1,8 @@
 from pypdf import PdfReader
 
-def extract_text(uploded_file):
+def extract_text(uploaded_file):
 
-    reader = PdfReader(uploded_file)
+    reader = PdfReader(uploaded_file)
     text = ""
 
     for page in reader.pages:
