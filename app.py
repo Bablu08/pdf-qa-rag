@@ -50,10 +50,18 @@ with st.sidebar:
             st.rerun()
 
 # conversation history
+if "messages" not in st.session_state:
+    st.session_state["messages"] = []
+
+for msg in st.session_state["messages"]:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
 
 user_search = st.chat_input("Ask your question...")
 
 if user_search:
+
+    st.session_state["messages"].append({"role": "user", "content":user_search})
 
     with st.chat_message("user"):
         st.write(user_search)
@@ -68,7 +76,9 @@ if user_search:
             reply = ask_llm(prompt)
 
             with st.chat_message("assistant"):
-                st.write_stream(reply)
+                full_reply = st.write_stream(reply)
+
+                st.session_state["messages"].append({"role":"assistant", "content":full_reply})
                 
         except Exception as e:
             with st.chat_message("assistant"):
