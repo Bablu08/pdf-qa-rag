@@ -53,3 +53,4 @@ def reset_knowledge_base():
             client.delete_collection(st.session_state["collection_name"])
         except Exception:
             pass
+        del st.session_state["collection_name"]
