@@ -3,7 +3,7 @@ import os
 import streamlit as st
 
 from pdf_processor import (extract_text, chunk_text)
-from vector_store import (add_to_knowledge_base, search_knowledge_base)
+from vector_store import (add_to_knowledge_base, search_knowledge_base, reset_knowledge_base)
 from prompts import build_prompt
 from groq_client import ask_llm
 
@@ -27,20 +27,27 @@ with st.sidebar:
     if uploaded_file and "db_ready" not in st.session_state:
 
         try:
-            text = extract_text(uploaded_file)
+            with st.spinner("Processing PDF...."):
+                text = extract_text(uploaded_file)
 
-            if text.strip() == "":
-                st.warning("This PDF contains no extractable text. It may be a scanned/image-only PDF.")
-                st.stop()
+                if text.strip() == "":
+                    st.warning("This PDF contains no extractable text. It may be a scanned/image-only PDF.")
+                    st.stop()
 
-            chunks = chunk_text(text, 300, 75)
+                chunks = chunk_text(text, 300, 75)
 
-            add_to_knowledge_base(chunks)
+                add_to_knowledge_base(chunks)
 
-            st.session_state["db_ready"] = True
+                st.session_state["db_ready"] = True
 
         except Exception as e:
             st.error(f"Error: {e}")
+
+    if st.session_state.get("db_ready"):
+        if st.button("Start Over / Upload New PDF"):
+            reset_knowledge_base()
+            st.session_state.clear()
+            st.rerun()
 
 # conversation history
 
