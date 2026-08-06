@@ -1,8 +1,11 @@
 import uuid
+from dotenv import load_dotenv
 
 import chromadb
 import streamlit as st
 from sentence_transformers import SentenceTransformer
+
+load_dotenv()
 
 @st.cache_resource
 def load_model():
