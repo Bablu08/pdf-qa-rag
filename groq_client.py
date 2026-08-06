@@ -1,4 +1,6 @@
 import os
+from dotenv import load_dotenv
+
 from groq import Groq
 
 client = None
@@ -7,6 +9,7 @@ def ask_llm(prompt):
     global client
 
     if client is None:
+        load_dotenv()
         api_key=os.environ.get("GROQ_API_KEY")
 
         if not api_key:
